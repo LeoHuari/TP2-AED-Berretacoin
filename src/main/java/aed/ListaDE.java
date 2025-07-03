@@ -1,5 +1,7 @@
 package aed;
 
+import java.util.ArrayList;
+
 public class ListaDE<T> {
     private Nodo primero;
     private Nodo ultimo;
@@ -68,34 +70,35 @@ public class ListaDE<T> {
     }
 
     public void eliminar(int i){
-        Nodo actual = this.obtenerNodo(i);
+        if (i < 0 || i > this.longitud) {
+            return;
+        }
 
-        if (this.longitud == 1 && i == 0) {
+        if (i == 0 && this.longitud == 0) {
+            return;
+        }
+
+        Nodo actual = this.obtenerNodo(i);
+        
+        eliminarNodo(actual);
+    }
+
+    private void eliminarNodo(Nodo n){
+        Nodo anterior = n.anterior;
+        Nodo siguiente = n.siguiente;
+        if (this.longitud == 1) {
             this.primero = null;
             this.ultimo = null;
             this.longitud--;
             return;
         }
-        if (actual.siguiente == null) {
-            actual.anterior.siguiente = null;
-            this.ultimo = actual.anterior;
-            this.longitud--;
-            return;
+        if (anterior != null) {
+            anterior.siguiente = siguiente;
         }
-        if (actual.anterior == null) {
-            actual.siguiente.anterior = null;
-            this.primero = actual.siguiente;
-            this.longitud--;
-            return;
+        if (siguiente != null) {
+            siguiente.anterior = anterior;
         }
-        actual.anterior.siguiente = actual.siguiente;
-        actual.siguiente.anterior = actual.anterior;
-
         this.longitud--;
-    }
-
-    private void eliminarNodo(Nodo n){
-
     }
 
     public void modificarPosicion(int i, T elem){
@@ -115,8 +118,103 @@ public class ListaDE<T> {
         this.longitud = lista.longitud();
     }
 
+    public ArrayList<HandleListaDE> getHandles(){
+        
+    }
+
     @Override
     public String toString(){
+        StringBuffer res = new StringBuffer("["+this.primero.valor);
+        Nodo actual = this.primero.siguiente;
+        while (actual != null) {
+            res.append(", "+actual.valor);
+            actual = actual.siguiente;
+        }
+        res.append("]");
+        return res.toString();
+    }
 
+    private class ListaIterador implements Iterador<T>{
+        private int indice;
+        private Nodo actual;
+
+        public ListaIterador(){
+            this.indice = 0;
+            this.actual = primero;
+        }
+
+        @Override
+        public boolean haySiguiente() {
+            boolean existe = this.indice < longitud;
+            return existe;
+        }
+
+        @Override
+        public boolean hayAnterior() {
+            if (longitud == 0) {
+                return false;
+            }
+            if (longitud == indice) {
+                return true;
+            }
+            boolean existe = indice > 0 && indice <= longitud;
+            return existe;
+        }
+
+        @Override
+        public T siguiente() {
+            Nodo res = this.actual;
+            if (actual.siguiente != null) {
+                actual = actual.siguiente;
+            }
+            this.indice++;
+
+            return res.valor;
+        }
+
+        @Override
+        public T anterior() {
+            Nodo res = null;
+            if (longitud == this.indice) {
+                res = actual;
+            }else{
+                res = actual.anterior;
+                actual = actual.anterior;
+            }
+            this.indice--;
+
+            return res.valor;
+        }
+        
+    }
+
+    public Iterador<T> iterador(){
+        return new ListaIterador();
+    }
+
+    public class HandleListaDE implements Handle<T>{
+        private Nodo puntero;
+
+        public HandleListaDE(Nodo v){
+            this.puntero = v;
+        }
+
+        @Override
+        public T getValor() {
+            return this.puntero.valor;
+        }
+
+        @Override
+        public void modificar(T v) {
+            this.puntero.valor = v;
+        }
+
+        public void eliminar(){
+            eliminarNodo(puntero);
+        }
+    }
+    
+    private HandleListaDE handle(Nodo n){
+        return new HandleListaDE(n);
     }
 }
