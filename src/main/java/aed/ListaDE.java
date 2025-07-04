@@ -77,7 +77,7 @@ public class ListaDE<T> {
         if (i == 0 && this.longitud == 0) {
             return;
         }
-
+        
         Nodo actual = this.obtenerNodo(i);
         
         eliminarNodo(actual);
@@ -89,6 +89,18 @@ public class ListaDE<T> {
         if (this.longitud == 1) {
             this.primero = null;
             this.ultimo = null;
+            this.longitud--;
+            return;
+        }
+        if (this.primero == n) {
+            this.primero.siguiente.anterior = null;
+            this.primero = this.primero.siguiente;
+            this.longitud--;
+            return;
+        }
+        if (this.ultimo == n) {
+            this.ultimo.anterior.siguiente = null;
+            this.ultimo = this.ultimo.anterior;
             this.longitud--;
             return;
         }
@@ -119,7 +131,16 @@ public class ListaDE<T> {
     }
 
     public ArrayList<HandleListaDE> getHandles(){
+        Nodo actual = this.primero;
+        ArrayList<HandleListaDE> res = new ArrayList<>(this.longitud);
         
+        while (actual != null) {
+            HandleListaDE handle = new HandleListaDE(actual);
+            res.add(handle);
+            actual = actual.siguiente;
+        }
+
+        return res;
     }
 
     @Override
@@ -211,6 +232,11 @@ public class ListaDE<T> {
 
         public void eliminar(){
             eliminarNodo(puntero);
+        }
+
+        @Override
+        public String toString(){
+            return this.puntero.valor.toString();
         }
     }
     
