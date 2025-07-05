@@ -2,7 +2,7 @@ package aed;
 
 import java.util.ArrayList;
 
-public class ListaDE<T> {
+public class ListaDE<T extends Comparable<T>> {
     private Nodo primero;
     private Nodo ultimo;
     private int longitud;
@@ -213,7 +213,7 @@ public class ListaDE<T> {
         return new ListaIterador();
     }
 
-    public class HandleListaDE implements Handle<T>{
+    public class HandleListaDE implements Handle<T>, Comparable<HandleListaDE>{
         private Nodo puntero;
 
         public HandleListaDE(Nodo v){
@@ -237,6 +237,11 @@ public class ListaDE<T> {
         @Override
         public String toString(){
             return this.puntero.valor.toString();
+        }
+
+        @Override
+        public int compareTo(ListaDE<T>.HandleListaDE o) {
+            return this.puntero.valor.compareTo(o.puntero.valor);
         }
     }
     
