@@ -245,7 +245,4 @@ public class ListaDE<T extends Comparable<T>> {
         }
     }
     
-    private HandleListaDE handle(Nodo n){
-        return new HandleListaDE(n);
-    }
 }

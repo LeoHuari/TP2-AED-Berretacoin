@@ -4,9 +4,9 @@ public class Usuario implements Comparable<Usuario>{
     private int id;
     private int dinero;
 
-    public Usuario(int id, int dinero){
+    public Usuario(int id){
         this.id = id;
-        this.dinero = dinero;
+        this.dinero = 0;
     }
 
     public int getId(){
