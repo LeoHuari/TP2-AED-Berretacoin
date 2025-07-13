@@ -69,6 +69,18 @@ public class ListaDE<T extends Comparable<T>> {
         return this.obtenerNodo(i).valor;
     }
 
+    public boolean pertenece(T v){
+        boolean res = false;
+        Nodo actual = this.primero;
+        while (actual != null && !res) {
+            if (actual.valor.equals(v)) {
+                res = true;
+            }
+            actual = actual.siguiente;
+        }
+        return res;
+    }
+
     public void eliminar(int i){
         if (i < 0 || i > this.longitud) {
             return;
