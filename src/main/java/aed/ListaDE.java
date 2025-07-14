@@ -247,11 +247,6 @@ public class ListaDE<T extends Comparable<T>> {
         }
 
         @Override
-        public String toString(){
-            return this.puntero.valor.toString();
-        }
-
-        @Override
         public int compareTo(ListaDE<T>.HandleListaDE o) {
             return this.puntero.valor.compareTo(o.puntero.valor);
         }
